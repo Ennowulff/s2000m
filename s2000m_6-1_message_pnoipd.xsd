@@ -1,0 +1,1277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="000-01" xmlns:xsd="http://www.w3.org/2001/XMLSchema" vc:minVersion="1.1"
+    xmlns="http://www.asd-europe.org/s-series/s2000m"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    xmlns:value="http://www.asd-europe.org/spec/validValues"    
+    xmlns:unit="http://www.asd-europe.org/spec/validValues"
+    targetNamespace="http://www.asd-europe.org/s-series/s2000m"> 
+    
+    <xsd:annotation>
+        <xsd:documentation>Issue number: 6.1</xsd:documentation>
+        <xsd:documentation>Issue date: 2017-08-24</xsd:documentation>
+        <xsd:documentation>XML schema release number: 002-00</xsd:documentation>
+        <xsd:documentation>XML schema release date: 2017-10-06</xsd:documentation>
+        <xsd:documentation>URL: http://www.s2000m.org</xsd:documentation>
+        <xsd:documentation>Root element: pnoipd</xsd:documentation>
+        <xsd:documentation>Copyright:
+            Copyright (C) 2017 by each of the following organizations:
+            1.  AeroSpace and Defence Industries Associations of Europe - ASD.
+            2.  Ministries of Defence of the member countries of ASD.
+            
+            Limitations of Liability:
+            
+            1.  This material is provided "As Is" and neither ASD nor any person who has contributed to the creation, revision or maintenance of the material makes any representations or warranties, express or implied, including but not limited to, warranties of merchantability or fitness for any particular purpose.
+            2.  Neither ASD nor any person who has contributed to the creation, revision or maintenance of this material shall be liable for any direct, indirect, special or consequential damages or any other liability arising from any use of this material.
+            3.  Revisions to this document may occur after its issuance.  The user is responsible for determining if revisions to the material contained in this document have occurred and are applicable. 
+        </xsd:documentation>
+    </xsd:annotation>
+    
+    <xsd:import schemaLocation="s2000m_6-1_valid_values.xsd" namespace="http://www.asd-europe.org/spec/validValues"/>
+    
+    <xsd:element name="pnoipd" type="message"/>
+    
+    <xsd:complexType name="message">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:Message</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes-->
+            <xsd:element name="drs" type="messageIdentifier" minOccurs="1" nillable="true"/>
+            <xsd:element name="drd" type="messageCreationDate" minOccurs="1" nillable="true"/>
+            <xsd:element name="lge" type="messageLanguage" minOccurs="1" nillable="true"/>
+            <xsd:element name="mcs" type="messageContentStatus" minOccurs="1" nillable="true"/>
+            <xsd:element name="rmk" type="remarkText" minOccurs="0" nillable="true"/>
+            <!--UML-EmbAssocs-->
+            <xsd:element name="tod" type="messageSender" minOccurs="1"/>
+            <xsd:element name="add" type="messageReceiver" minOccurs="1"/>
+            <xsd:element name="msgContext" type="messageContext" minOccurs="1" nillable="true"/>
+            <!--UML-CompAssocs-->
+            <xsd:element name="msgContent" type="partOrientedProvisioningProjectContent" minOccurs="1" nillable="true"/>
+        </xsd:sequence>        
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>  
+        
+    <xsd:complexType name="partOrientedProvisioningProjectContent">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:PartOrientedProvisioningProjectContent</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-CompAssocs-->
+            <xsd:element name="prc" type="partInProvisioningProject" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+            <xsd:element name="pas" type="hardwarePartAsDesigned" minOccurs="0" maxOccurs="unbounded" nillable="true"/> 
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>
+    
+    <!-- ===============================  UML CLASSES ======================================= -->
+    
+    <xsd:complexType name="hardwarePartAsDesigned">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:HardwarePartAsDesigned</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes-->
+            <xsd:element name="pid" type="partIdentifier"/>
+            <xsd:element name="dfp" type="partName" minOccurs="0" nillable="true"/>
+            <!--UML-AttGroups-->
+            <xsd:group ref="hardwarePartAsDesignedDesignData"/>
+            <xsd:group ref="hardwarePartAsDesignedSupportData"/>
+            <xsd:group ref="hardwarePartAsDesignedControlledItemData"/>
+            <xsd:group ref="hardwarePartAsDesignedCommerceData"/>
+            <xsd:group ref="hardwarePartAsDesignedCustomerFurnishedData"/>
+            <xsd:group ref="natoCodification"/>
+            <!--UML-EmbAssocs-->
+            <xsd:element name="rpp" type="replacementPartRelationship" nillable="true" minOccurs="0"/>
+            <xsd:element name="ageRef" type="partRequirementsDefinitionReference" nillable="true" minOccurs="0"/>
+            <xsd:element name="cti" type="hardwarePartContainer" nillable="true" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>   
+    
+    <xsd:complexType name="hardwarePartContainer">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:HardwarePartContainer</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-EmbAssocs-->
+            <xsd:element name="pidRef" type="partAsDesignedReference"/>
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="messageContext">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:MessageContext</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-EmbAssocs-->
+            <xsd:group ref="messageContextItemSelect"/>
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="messageReceiver">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:MessageReceiver</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Interfaces-->
+            <xsd:group ref="messagePartySelect"/>
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="messageSender">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:MessageSender</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Interfaces-->
+            <xsd:group ref="messagePartySelect"/>
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="partInProvisioningProject">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:PartInProvisioningProject</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes-->
+            <xsd:element name="pidRef" type="partAsDesignedReference"/>
+            <xsd:element name="tqy" type="totalQuantityInProvisioningProject" nillable="true" minOccurs="0"/>
+            <!--UML-AttGroups-->
+            <xsd:group ref="sparesRecommendation"/>
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="provisioningProject">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:ProvisioningProject</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes-->
+            <xsd:element name="ipp" type="provisioningProjectIdentifier"/>
+            <xsd:element name="ips" type="provisioningProjectSubject" nillable="true" minOccurs="0"/>
+            <xsd:element name="fid" type="provisioningProjectTypeOfPresentation" nillable="true" minOccurs="0"/>
+            <!--UML-EmbAssocs-->
+            <xsd:element name="ippDel" type="provisioningProjectDelivery" nillable="true" minOccurs="0"/>
+            <!--UML-Interfaces-->
+            <xsd:group ref="provisioningProjectContextItem"/>
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="provisioningProjectDelivery">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:provisioningProjectDelivery</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes-->
+            <xsd:element name="iss" type="provisioningProjectStatus"/>
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="replacementPartRelationship">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:ReplacementPartRelationship</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-EmbAssocs-->
+            <xsd:element name="pidRef" type="partAsDesignedReference"/>
+            <!--UML-Interfaces-->
+            <xsd:group ref="changeControlledItem"/>
+        </xsd:sequence>
+        <xsd:attribute name="crud" type="crudCodeValues" default="I"/>
+    </xsd:complexType>	
+    
+    
+    <!-- ============================== UML INTERFACES ====================================== -->
+    
+    <xsd:group name="changeControlledItem">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:ChangeControlledItem</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-EmbAssocs-->
+            <xsd:element name="chgRef" type="changeAuthorizationReference" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+        </xsd:sequence>
+    </xsd:group>  
+    
+    <xsd:group name="messageContextItemSelect">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:MessageContextItemSelect</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:choice>         
+            <xsd:element name="ippn" type="provisioningProject" minOccurs="0"/>
+        </xsd:choice>
+    </xsd:group> 
+    
+    <xsd:group name="messagePartySelect">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:MessagePartySelect</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:element name="orgRef" type="organizationReference" minOccurs="0"/>
+        </xsd:choice>
+    </xsd:group> 
+    
+    <xsd:group name="provisioningProjectContextItem">
+        <xsd:annotation>
+            <xsd:appinfo>SX0001:ProvisioningProjectContextItem</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:element name="moiRef" type="productReference" nillable="true" minOccurs="0"/>
+        </xsd:choice>
+    </xsd:group>
+    
+    <xsd:group name="serviceApplicabilityItem">
+        <xsd:annotation>
+            <xsd:appinfo>SX0001:ServiceApplicabilityItem</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:choice>
+            <!--UML-EmbAssocs-->
+            <xsd:element name="srvRef" type="userReference" minOccurs="0" nillable="true"/>
+        </xsd:choice>
+    </xsd:group>
+    
+    <!-- =========================  UML ATTRIBUTE GROUPS =================================== -->
+    
+    <xsd:group name="hardwarePartAsDesignedCommerceData">
+        <xsd:annotation>
+            <xsd:appinfo>SX0001:HardwarePartAsDesignedCommerceData</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes-->
+            <xsd:element name="msq" type="minimumSalesQuantity" nillable="true" minOccurs="0"/>
+            <xsd:element name="uop" type="hardwarePartUnitOfIssuePrice" nillable="true" minOccurs="0"/>
+            <xsd:element name="top" type="typeOfPrice" nillable="true" minOccurs="0"/>
+            <!--UML-AttGroups-->
+            <xsd:group ref="priceBreakData"/>
+        </xsd:sequence>
+    </xsd:group>
+    
+    <xsd:group name="hardwarePartAsDesignedControlledItemData">
+        <xsd:annotation>
+            <xsd:appinfo>SX0001:HardwarePartAsDesignedControlledItemData</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes-->
+            <xsd:element name="dec" type="partDemilitarizationClass" nillable="true" minOccurs="0"/>
+            <xsd:element name="scc" type="securityClass" nillable="true" minOccurs="0"/>
+            <xsd:element name="sic" type="partSensitiveItemClass" nillable="true" minOccurs="0"/>
+            <xsd:element name="psc" type="hardwarePartPilferageClass" nillable="true" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:group>
+    
+    <xsd:group name="hardwarePartAsDesignedCustomerFurnishedData">
+        <xsd:annotation>
+            <xsd:appinfo>SX0001:HardwarePartAsDesignedCustomerFurnishedData</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes-->
+            <xsd:element name="dmc" type="inventoryManagementClass" nillable="true" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:group>
+    
+    <xsd:group name="hardwarePartAsDesignedDesignData">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:HardwarePartAsDesignedDesignData</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes-->
+            <xsd:element name="haz" type="hardwarePartHazardousClass" minOccurs="0" nillable="true"/>
+            <xsd:element name="aul" type="authorizedLifeValue" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+            <xsd:element name="sim" type="serializedItemTraceabilityRequirement" minOccurs="0" nillable="true"/>
+            <xsd:element name="suu" type="hardwarePartSize" minOccurs="0" nillable="true"/>
+            <xsd:element name="wuu" type="hardwarePartWeight" minOccurs="0" nillable="true"/>
+            <xsd:element name="cmk" type="hardwarePartCalibrationRequirement" minOccurs="0" fixed="true" nillable="true"/>
+            <xsd:element name="emi" type="hardwarePartElectromagneticIncompatible" minOccurs="0" fixed="true" nillable="true"/>
+            <xsd:element name="ess" type="hardwarePartElectrostaticSensitive" minOccurs="0" fixed="true" nillable="true"/>
+            <xsd:element name="ems" type="hardwarePartElectromagneticSensitive" minOccurs="0" fixed="true" nillable="true"/>
+            <xsd:element name="mse" type="hardwarePartMagneticSensitive" minOccurs="0" fixed="true" nillable="true"/>
+            <xsd:element name="rse" type="hardwarePartRadiationSensitive" minOccurs="0" fixed="true" nillable="true"/>               
+            <xsd:element name="str" type="hardwarePartSpecialStorageRequirement" minOccurs="0" default="false" nillable="true"/>
+            <xsd:element name="slt" type="hardwarePartShelfLifeType" minOccurs="0" nillable="true"/>
+            <xsd:element name="slm" type="hardwarePartShelfLifeLimit" minOccurs="0" nillable="true"/>
+            <xsd:element name="sla" type="hardwarePartShelfLifeLimitAction" minOccurs="0" nillable="true"/>
+            <xsd:element name="tlf" type="hardwarePartTotalLifeLimit" minOccurs="0" nillable="true"/>
+        </xsd:sequence>
+    </xsd:group>
+    
+    <xsd:group name="hardwarePartAsDesignedSupportData">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:HardwarePartAsDesignedSupportData</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <!--UML-Attributes -->   
+            <xsd:element name="spc" type="hardwarePartRepairability" minOccurs="0" nillable="true"/>
+            <xsd:element name="sra" type="hardwarePartScrapRate" minOccurs="0" maxOccurs="unbounded" nillable="true"/>       
+            <xsd:element name="ity" type="hardwarePartProvisioningCategory" minOccurs="0" nillable="true"/>            
+            <xsd:element name="ftc" type="hardwarePartFitmentLevel" minOccurs="0" nillable="true"/>         
+            <xsd:element name="tbo" type="timeBetweenOverhaul" minOccurs="0" nillable="true"/>
+            <xsd:element name="tsv" type="timeBetweenScheduledShopVisits" minOccurs="0" nillable="true"/>
+            <xsd:element name="crt" type="contractorRepairTurnAroundTime" minOccurs="0" nillable="true"/>
+            <xsd:element name="uoi" type="hardwarePartUnitOfIssue" minOccurs="0" nillable="true"/>
+            <xsd:element name="qui" type="hardwarePartQuantityPerUnitOfIssue" minOccurs="0" nillable="true"/>
+            <xsd:element name="plc" type="hardwarePartPackagingRequirement" minOccurs="0" nillable="true"/>
+            <xsd:element name="pso" type="hardwarePartProcurementSource" minOccurs="0" nillable="true"/>
+            <xsd:element name="plt" type="hardwarePartPurchasingLeadTime" minOccurs="0" nillable="true"/>
+            <xsd:element name="pic" type="hardwarePartPoolItemCandidate" minOccurs="0" nillable="true"/>
+            <xsd:element name="osp" type="obsoletePart" minOccurs="0" nillable="true"/>
+            <xsd:element name="spq" type="hardwarePartStandardPackageQuantity" minOccurs="0" nillable="true"/>
+            <xsd:element name="spu" type="hardwarePartPackagedSize" minOccurs="0" nillable="true"/>
+            <xsd:element name="wpu" type="hardwarePartPackagedWeight" minOccurs="0" nillable="true"/>
+        </xsd:sequence>
+    </xsd:group>
+    
+    <xsd:group name="natoCodification">
+        <xsd:annotation>
+            <xsd:appinfo>SX0001:NatoCodification</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="natoCode" minOccurs="0" nillable="true">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <!--UML-Attributes-->
+                        <xsd:element name="nsn" type="natoStockNumber" nillable="true" minOccurs="0"/>
+                        <xsd:element name="ain" type="natoItemName" nillable="true" minOccurs="0"/>
+                        <xsd:element name="inc" type="natoItemNameCode" nillable="true" minOccurs="0"/>
+                        <xsd:element name="rnc" type="referenceNumberCategory" nillable="true" minOccurs="0"/>
+                        <xsd:element name="rnv" type="referenceNumberVariation" nillable="true" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:group>
+    
+    <xsd:group name="priceBreakData">
+        <xsd:annotation>
+            <xsd:appinfo>SX0001:PriceBreakData</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="pbd" nillable="true" minOccurs="0" maxOccurs="3">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <!--UML-Attributes-->
+                        <xsd:element name="llq" type="lowerLimitSalesQuantity"/>
+                        <xsd:element name="ulq" type="upperLimitSalesQuantity"/>
+                        <xsd:element name="uop" type="hardwarePartUnitOfIssuePrice"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:group>
+    
+    <xsd:group name="sparesRecommendation">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:SparesRecommendation</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="pis" minOccurs="0" maxOccurs="10" nillable="true">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <!--UML-Attributes-->
+                        <xsd:element name="rsq" type="recommendedSparesQuantity" minOccurs="0" nillable="true"/>
+                        <!--UML-Interfaces-->
+                        <xsd:group ref="serviceApplicabilityItem"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:group>
+ 
+    <!-- =============================  UML ATTRIBUTES ====================================== -->
+    
+    <xsd:complexType name="authorizedLifeValue">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:authorizedLifeValue</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:timeCycleUnit"/>                            
+            <xsd:choice>
+                <xsd:sequence>
+                    <xsd:element name="value" type="xsd:nonNegativeInteger"/>                                    
+                </xsd:sequence>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="changeAuthorizationIdentifier">   
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:changeAuthorizationIdentifier</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:maxLength value="20"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element> 
+            <xsd:element name="class" type="value:changeAuthorizationIdentifierClassValues" minOccurs="0" nillable="true" default="CAN"/> 
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="contractorRepairTurnAroundTime">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:contractorRepairTurnAroundTime</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:timeUnit" default="DAY"/>
+            <xsd:element name="value">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:nonNegativeInteger">
+                        <xsd:maxInclusive value="999"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="hardwarePartCalibrationRequirement">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartCalibrationRequirement</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="hardwarePartElectromagneticIncompatible">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartElectromagneticIncompatible</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="hardwarePartElectromagneticSensitive">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartElectromagneticSensitive</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="hardwarePartElectrostaticSensitive">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartElectrostaticSensitive</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+    </xsd:simpleType>	
+    
+    <xsd:complexType name="hardwarePartFitmentLevel">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartFitmentLevel</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:hardwarePartFitmentLevelCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartHazardousClass">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartHazardousClass</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:hardwarePartHazardousClassCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="hardwarePartMagneticSensitive">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartMagneticSensitive</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+    </xsd:simpleType>
+    
+    <xsd:complexType name="hardwarePartPackagedSize">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartPackagedSize</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="length" type="lengthDimension">
+                <xsd:annotation>
+                    <xsd:appinfo>SX001D:length</xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:choice>
+                <xsd:sequence>
+                    <xsd:element name="width" type="lengthDimension">
+                        <xsd:annotation>
+                            <xsd:appinfo>SX001D:width</xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="height" type="lengthDimension">
+                        <xsd:annotation>
+                            <xsd:appinfo>SX001D:height</xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+                <xsd:sequence>
+                    <xsd:element name="diameter" type="lengthDimension">
+                        <xsd:annotation>
+                            <xsd:appinfo>SX001D:diameter</xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartPackagedWeight">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartPackagedWeight</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:massUnit"/>
+            <xsd:element name="value" type="xsd:nonNegativeInteger"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartPackagingRequirement">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartPackagingRequirement</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:hardwarePartPackagingRequirementCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartPilferageClass">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartPilferageClass</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:hardwarePartPilferageClassCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="hardwarePartPoolItemCandidate">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:harwarePartPoolItemCandidate</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+    </xsd:simpleType>
+    
+    <xsd:complexType name="hardwarePartProvisioningCategory">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartProvisioningCategory</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:hardwarePartProvisioningCategoryCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>	
+    
+    <xsd:complexType name="hardwarePartProcurementSource">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartProcurementSource</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="orgRef" type="organizationReference"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartPurchasingLeadTime">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartPurchasingLeadTime</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:timeUnit" default="MON"/>
+            <xsd:element name="value">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:nonNegativeInteger">
+                        <xsd:maxInclusive value="99"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartQuantityPerUnitOfIssue">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartQuantityPerUnitOfIssue</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:quantityUnit"/>
+            <xsd:element name="value">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:nonNegativeInteger">
+                        <xsd:maxInclusive value="9999"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="hardwarePartRadiationSensitive">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartRadiationSensitive</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+    </xsd:simpleType>
+    
+    <xsd:complexType name="hardwarePartRepairability">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartRepairability</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:hardwarePartRepairabilityCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartScrapRate">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartScrapRate</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>                 
+            <xsd:element name="unit" type="unit:relativeUnit" fixed="PCT"/>                            
+            <xsd:element name="value">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:nonNegativeInteger">
+                        <xsd:minInclusive value="99"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>                                    
+        </xsd:sequence> 
+    </xsd:complexType> 
+    
+    <xsd:complexType name="hardwarePartShelfLifeLimit">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartShelfLifeLimit</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:timeUnit" default="MON"/>
+            <xsd:element name="value">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:integer">
+                        <xsd:maxInclusive value="999"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartShelfLifeLimitAction">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartShelfLimitAction</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:hardwarePartShelfLifeLimitActionCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartShelfLifeType">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartShelfLifeType</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:hardwarePartShelfLifeTypeCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartSize">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartSize</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="length" type="lengthDimension">
+                <xsd:annotation>
+                    <xsd:appinfo>SX001D:length</xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:choice>
+                <xsd:sequence>
+                    <xsd:element name="width" type="lengthDimension">
+                        <xsd:annotation>
+                            <xsd:appinfo>SX001D:width</xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="height" type="lengthDimension">
+                        <xsd:annotation>
+                            <xsd:appinfo>SX001D:height</xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+                <xsd:sequence>
+                    <xsd:element name="diameter" type="lengthDimension">
+                        <xsd:annotation>
+                            <xsd:appinfo>SX001D:diameter</xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="hardwarePartSpecialStorageRequirement">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartSpecialStorageRequirement </xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+    </xsd:simpleType>	
+    
+    <xsd:simpleType name="hardwarePartStandardPackageQuantity">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartStandardPackageQuantity</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:positiveInteger">
+            <xsd:maxInclusive value="9999"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:complexType name="hardwarePartTotalLifeLimit">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartTotalLifeLimit</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:sequence>
+                <xsd:element name="unit" type="unit:timeCycleUnit" default="MON"/>
+                <xsd:element name="value">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:nonNegativeInteger">
+                            <xsd:maxInclusive value="999"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartUnitOfIssue">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartUnitOfIssue</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:hardwarePartUnitOfIssueCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartUnitOfIssuePrice">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartUnitOfIssuePrice</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:currencyUnit"/>
+            <xsd:element name="value" type="xsd:nonNegativeInteger"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="hardwarePartWeight">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:hardwarePartWeight</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:massUnit"/>
+            <xsd:element name="value" type="xsd:nonNegativeInteger"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="inventoryManagementClass">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:inventoryManagementClass</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:inventoryManagementClassCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="lowerLimitSalesQuantity">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:lowerLimitSalesQuantity</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:positiveInteger">
+            <xsd:maxInclusive value="99999"></xsd:maxInclusive>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:complexType name="messageContentStatus">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:messageContentStatus</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:messageContentStatusCodeValues"/>
+        </xsd:sequence>  
+    </xsd:complexType>
+    
+    <xsd:complexType name="messageCreationDate">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:messageCreationDate</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="dateTime" type="xsd:dateTime"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="messageIdentifier">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:messageIdentifier</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:pattern value="[0-9][0-9][0-9][0-9]"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element> 
+            <xsd:element name="class" type="value:messageIdentifierClassValues" minOccurs="0" nillable="true" default="DRS"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="messageLanguage">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:messageLanguage</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="value:languageCodeValues"/>                
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="minimumSalesQuantity">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:minimumSalesQuantity</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:positiveInteger">
+            <xsd:maxInclusive value="99999"></xsd:maxInclusive>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:complexType name="natoItemName">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:NATOItemName</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="descr">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:maxLength value="130"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="natoItemNameCode">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:NATOItemNameCode</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:natoItemNameCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="natoStockNumber">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:NATOStockNumber</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="nsc" type="value:natoSupplyClassCodeValues">
+                <xsd:annotation>
+                    <xsd:appinfo>SX001G:NATOSupplyClass</xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="nin">
+                <xsd:annotation>
+                    <xsd:appinfo>SX001G:NATOItemIdentificationNumber</xsd:appinfo>
+                </xsd:annotation>
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:pattern value="[0-9]{7}"></xsd:pattern>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="obsoletePart">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:obsoletePart</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:boolean"/>
+    </xsd:simpleType>
+    
+    <xsd:complexType name="organizationIdentifier">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:organizationIdentifier</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:length value="5"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="class" type="value:organizationIdentifierClassValues" minOccurs="0" fixed="CAGE"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="partDemilitarizationClass">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:partDemilitarizationClass</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:partDemilitarizationClassCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="partIdentifier">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:partIdentifier</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id" type="nonEmptyString"/> 
+            <xsd:element name="class" type="value:partIdentifierClassValues" minOccurs="0" default="PNO"/> 
+            <xsd:element name="setBy" type="organizationReference" nillable="true"/> 
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="partName">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:partName</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>                   
+            <xsd:element name="descr">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:maxLength value="130"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="lang" type="value:languageCodeValues" minOccurs="0" nillable="true"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="partSensitiveItemClass">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:partSensitiveItemClass</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:partSensitiveItemClassCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="productIdentifier">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:productIdentifier</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:minLength value="2"/>
+                        <xsd:maxLength value="14"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element> 
+            <xsd:element name="class" type="value:productIdentifierClassValues" minOccurs="0" nillable="true" default="MOI"/> 
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="provisioningProjectIdentifier">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:provisioningProjectIdentifier</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:length value="9"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="class" type="value:provisioningProjectIdentifierClassValues" minOccurs="0" default="IPN"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="provisioningProjectStatus">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:provisioningProjectStatus</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:provisioningProjectStatusCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="provisioningProjectSubject">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:provisioningProjectSubject</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="descr">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:maxLength value="40"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="provisioningProjectTypeOfPresentation">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:provisioningProjectTypeOfPresentation</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:provisioningProjectTypeOfPresentationCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="recommendedSparesQuantity">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:recommendedSparesQuantity</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:positiveInteger">
+            <xsd:maxInclusive value="99999"/>
+        </xsd:restriction>
+    </xsd:simpleType>	
+    
+    <xsd:complexType name="referenceNumberCategory">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:referenceNumberCategory</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:referenceNumberCategoryCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="referenceNumberVariation">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:referenceNumberVariation</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:referenceNumberVariationCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="remarkText">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:remarkText</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>                     
+            <xsd:element name="descr">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:maxLength value="130"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="lang" type="value:languageCodeValues" minOccurs="0" nillable="true"/>
+        </xsd:sequence>
+    </xsd:complexType> 
+    
+    <xsd:complexType name="requirementsDefinitionNumber">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:requirementsDefinitionNumber</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:maxLength value="12"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="class" type="value:requirementsDefinitionNumberClassValues" minOccurs="0" default="AGE"/>
+            <xsd:element name="setBy" type="organizationReference" nillable="true" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>	
+    
+    <xsd:complexType name="securityClass">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:securityClass</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:securityClassCodeValues"/>
+        </xsd:sequence> 
+    </xsd:complexType>
+    
+    <xsd:complexType name="serializedItemTraceabilityRequirement">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:serializedItemTraceabilityRequirement</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:serializedItemTraceabilityRequirementCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="timeBetweenOverhaul">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:timeBetweenOverhaul</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:timeCycleUnit"/>
+            <xsd:element name="value" type="xsd:nonNegativeInteger"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="timeBetweenScheduledShopVisits">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:timeBetweenScheduledShopVisits</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:timeCycleUnit"/>
+            <xsd:element name="value" type="xsd:nonNegativeInteger"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="totalQuantityInProvisioningProject">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:totalQuantityInProvisioningProject</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:sequence>
+                <xsd:element name="unit" type="unit:quantityUnit" default="EA"/>
+                <xsd:element name="value">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:nonNegativeInteger">
+                            <xsd:maxInclusive value="99999"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:element name="txt">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:enumeration value="REF">
+                            <xsd:annotation>
+                                <xsd:appinfo>SX001G:definedByReferencedItem</xsd:appinfo>
+                            </xsd:annotation>
+                        </xsd:enumeration>
+                        <xsd:enumeration value="AR">
+                            <xsd:annotation>
+                                <xsd:appinfo>SX001G:asRequired</xsd:appinfo>
+                            </xsd:annotation>
+                        </xsd:enumeration>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:choice>	
+    </xsd:complexType>
+    
+    <xsd:complexType name="typeOfPrice">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:typeOfPrice</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="code" type="value:typeOfPriceCodeValues"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:simpleType name="upperLimitSalesQuantity">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:upperLimitSalesQuantity</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:positiveInteger">
+            <xsd:maxInclusive value="99999"></xsd:maxInclusive>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:complexType name="userIdentifier">
+        <xsd:annotation>
+            <xsd:appinfo>SX001G:userIdentifier</xsd:appinfo>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="id">
+                <xsd:simpleType>
+                    <xsd:restriction base="nonEmptyString">
+                        <xsd:pattern value="[A-Z]{2}[A-Z]?"></xsd:pattern>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="class" type="value:userIdentifierClassValues" minOccurs="0" default="SRV"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <!-- =================== UML CLASS REFERENCE UTILITY CLASSES ============================ -->
+    
+    <xsd:complexType name="changeAuthorizationReference">
+        <xsd:sequence>
+            <xsd:element name="can" type="changeAuthorizationIdentifier"/>       
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="organizationReference">
+        <xsd:sequence>
+            <xsd:element name="orgId" type="organizationIdentifier"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="partAsDesignedReference">
+        <xsd:sequence>
+            <xsd:element name="pid" type="partIdentifier"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="partRequirementsDefinitionReference" >
+        <xsd:sequence>
+            <xsd:element name="age" type="requirementsDefinitionNumber"/>      
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="productReference">
+        <xsd:sequence>
+            <xsd:element name="moi" type="productIdentifier"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="userReference">
+        <xsd:sequence>
+            <xsd:element name="srv" type="userIdentifier"/>      
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <!-- ==================== UML SPECIALIZATION UTILITY CLASSES ============================ -->
+              
+    <xsd:complexType name="lengthDimension">
+        <xsd:sequence>
+            <xsd:element name="unit" type="unit:lengthUnit"/>
+            <xsd:element name="value">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:nonNegativeInteger">
+                        <xsd:maxInclusive value="9999"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+   
+    <!-- ========================= BASE SCHEMA DEFINITIONS ================================== -->
+    
+    
+    <xsd:simpleType name="nonEmptyString">  
+        <xsd:restriction base="xsd:token">  
+            <xsd:minLength value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="crudCodeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="I">
+                <xsd:annotation>
+                    <xsd:appinfo>SX001G:insertedElement</xsd:appinfo>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="D">
+                <xsd:annotation>
+                    <xsd:appinfo>SX001G:deletedElement</xsd:appinfo>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="U">
+                <xsd:annotation>
+                    <xsd:appinfo>SX001G:updatedElement</xsd:appinfo>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="R">
+                <xsd:annotation>
+                    <xsd:appinfo>SX001G:replacedElement</xsd:appinfo>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="N">
+                <xsd:annotation>
+                    <xsd:appinfo>SX001G:nonChangedElement</xsd:appinfo>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>      
+    
+</xsd:schema>
